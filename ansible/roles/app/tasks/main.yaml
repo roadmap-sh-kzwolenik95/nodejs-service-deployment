@@ -1,0 +1,7 @@
+- name: Copy file with owner and permissions
+  ansible.builtin.copy:
+    src: files/server.js
+    dest: "{{ ansible_facts.user_dir }}/"
+    owner: root
+    group: root
+    mode: '0644'

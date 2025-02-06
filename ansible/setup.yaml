@@ -1,0 +1,8 @@
+- name: Deploy app
+  hosts: all
+  remote_user: root
+  roles:
+    - role: base
+      tags: [base]
+    - role: app
+      tags: [app]
