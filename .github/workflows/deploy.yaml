@@ -1,0 +1,48 @@
+name: Manual deploy pipeline
+
+on:
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: read
+
+
+jobs:
+  terraform:
+    runs-on: ubuntu-latest
+    env:
+      TF_FORCE_LOCAL_BACKEND: 1
+      TF_TOKEN_app_terraform_io: ${{ secrets.HCP_TERRAFORM_TOKEN }}
+      DIGITALOCEAN_TOKEN: ${{ secrets.DIGITALOCEAN_API_TOKEN }}
+    defaults:
+      run:
+        working-directory: terraform
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Terraform Init
+        run: terraform init
+
+      - name: Terraform Validate
+        run: terraform validate -no-color
+
+      - name: Terraform Plan
+        run: terraform plan -no-color
+
+      - name: Terraform Apply
+        run: terraform apply -no-color --auto-approve
+
+      - name: Run Ansible playbook
+        uses: dawidd6/action-ansible-playbook@v2.8.0
+        with:
+          playbook: setup.yaml
+          directory: ansible
+          key: ${{ secrets.SSH_PRIV_KEY }}
+          options: |
+            --inventory inventory_digitalocean.yaml
+            --extra-vars acme_email=${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}.git
