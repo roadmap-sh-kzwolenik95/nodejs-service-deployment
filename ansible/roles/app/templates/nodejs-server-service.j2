@@ -1,0 +1,14 @@
+[Unit]
+Description=NodeJS Hello World service
+After=network.target
+
+[Service]
+User=root
+Group=root
+WorkingDirectory={{ working_directory }}
+ExecStart=bash -c "npm start"
+Restart=always
+RestartSec=3
+
+[Install]
+WantedBy=multi-user.target

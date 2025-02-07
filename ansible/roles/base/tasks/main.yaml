@@ -2,3 +2,8 @@
   ansible.builtin.dnf:
     name: '@nodejs:22/common'
     state: present
+
+- name: Install git
+  ansible.builtin.dnf:
+    name: git
+    state: present
