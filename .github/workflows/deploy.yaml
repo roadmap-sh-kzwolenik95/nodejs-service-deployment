@@ -46,4 +46,4 @@ jobs:
           key: ${{ secrets.SSH_PRIV_KEY }}
           options: |
             --inventory inventory_digitalocean.yaml
-            --extra-vars repository_url=${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}.git
+            --extra-vars repository_url=$GITHUB_SERVER_URL/$GITHUB_REPOSITORY.git
